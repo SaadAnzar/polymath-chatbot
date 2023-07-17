@@ -10,13 +10,11 @@ export const connectToDB = async () => {
     return
   }
 
-  // const mongoDB_URI = process.env.MONGODB_URI as string
-
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URI!, {
       dbName: "custom-chatbot",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
     })
 
     isConnected = true

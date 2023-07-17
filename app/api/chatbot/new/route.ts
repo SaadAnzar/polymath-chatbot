@@ -1,7 +1,8 @@
+import { NextResponse } from "next/server"
 import Chatbot from "@/models/chatbot"
 import { connectToDB } from "@/utils/database"
 
-export const POST = async (request: any) => {
+export const POST = async (request: Request) => {
   const {
     userId,
     chatbotName,
@@ -25,8 +26,8 @@ export const POST = async (request: any) => {
     })
 
     await newChatbot.save()
-    return new Response(JSON.stringify(newChatbot), { status: 201 })
+    return new NextResponse(JSON.stringify(newChatbot), { status: 201 })
   } catch (error) {
-    return new Response("Failed to create a new chatbot", { status: 500 })
+    return new NextResponse("Failed to create a new chatbot", { status: 500 })
   }
 }

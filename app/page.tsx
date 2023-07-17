@@ -13,6 +13,7 @@ import SideBar from "@/components/SideBar"
 
 export default function Home() {
   const { data: session } = useSession()
+
   const router = useRouter()
 
   const [activeTab, setActiveTab] = useState("basics")
@@ -31,11 +32,13 @@ export default function Home() {
   const createChatbot = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    const uid = session?.user?.id
+
     try {
       const response = await fetch("/api/chatbot/new", {
         method: "POST",
         body: JSON.stringify({
-          userId: session?.user?.id,
+          userId: uid,
           chatbotName: name,
           imageURL: imagePreview,
           welcomeMessage: welcomeMessage,
@@ -44,6 +47,8 @@ export default function Home() {
           prompt: prompt,
         }),
       })
+
+      console.log(response)
 
       if (response.ok) {
         router.push("/profile")
@@ -59,11 +64,7 @@ export default function Home() {
         <Login />
       ) : (
         <div className="flex h-screen w-full">
-          <SideBar
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            session={session}
-          />
+          <SideBar activeTab={activeTab} setActiveTab={setActiveTab} />
 
           <div className="w-[45%]">
             <div className="h-full w-3/4 border-r-2">
