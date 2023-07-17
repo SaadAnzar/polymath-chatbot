@@ -3,7 +3,10 @@ import Chatbot from "@/models/chatbot"
 import { connectToDB } from "@/utils/database"
 
 // GET (read)
-export const GET = async ({ params }: { params: { id: string } }) => {
+export const GET = async (
+  request: Request,
+  { params }: { params: { id: string } }
+) => {
   try {
     await connectToDB()
 
@@ -17,7 +20,10 @@ export const GET = async ({ params }: { params: { id: string } }) => {
 }
 
 // DELETE (delete)
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (
+  request: Request,
+  { params }: { params: { id: string } }
+) => {
   try {
     await connectToDB()
 

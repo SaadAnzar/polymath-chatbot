@@ -2,7 +2,10 @@ import { NextResponse } from "next/server"
 import Chatbot from "@/models/chatbot"
 import { connectToDB } from "@/utils/database"
 
-export const GET = async ({ params }: { params: { id: string } }) => {
+export const GET = async (
+  request: Request,
+  { params }: { params: { id: string } }
+) => {
   try {
     await connectToDB()
 
