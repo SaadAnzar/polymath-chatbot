@@ -48,6 +48,8 @@ export default function Home() {
         }),
       })
 
+      console.log(response)
+
       if (response.ok) {
         router.push("/profile")
       }
