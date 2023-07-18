@@ -1,9 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 
 import ChatbotCard from "@/components/ChatbotCard"
+import Login from "@/components/Login"
 
 const MyProfile = () => {
   const { data: session } = useSession()
@@ -43,30 +44,45 @@ const MyProfile = () => {
     }
   }
 
+  if (!session) return <Login />
+
   return (
     <>
-      {myChatbots.length !== 0 ? (
-        <div>
-          {myChatbots.map((chatbot: any) => (
-            <ChatbotCard
-              key={chatbot._id}
-              uid={chatbot._id}
-              imageURL={chatbot.imageURL}
-              chatbotName={chatbot.chatbotName}
-              welcomeMessage={chatbot.welcomeMessage}
-              description={chatbot.description}
-              tags={chatbot.tags}
-              prompt={chatbot.prompt}
-              handleDelete={() => handleDelete && handleDelete(chatbot)}
-            />
-          ))}
-        </div>
-      ) : (
+      <div className="flex justify-between bg-black p-2">
+        <h1 className="mx-8 text-3xl font-semibold text-slate-300">
+          {session?.user?.name}
+        </h1>
+        <span className="mx-8 text-3xl font-bold text-slate-200">
+          My Chatbots
+        </span>
+        <button
+          onClick={() => signOut()}
+          className="mx-8 rounded-lg bg-[#FF9500] px-4 py-2 text-white hover:bg-[#ac6a0d]"
+        >
+          Sign Out
+        </button>
+      </div>
+
+      {myChatbots.length === 0 && (
         <div className="m-4 flex h-full flex-col items-center justify-center">
           <h1 className="text-4xl font-bold text-gray-800">No chatbots yet</h1>
-          <p className="mt-2 text-gray-500">Create a chatbot to see here</p>
+          <p className="mt-2 text-gray-500">Create a chatbot to view here</p>
         </div>
       )}
+
+      {myChatbots.map((chatbot: any) => (
+        <ChatbotCard
+          key={chatbot._id}
+          uid={chatbot._id}
+          imageURL={chatbot.imageURL}
+          chatbotName={chatbot.chatbotName}
+          welcomeMessage={chatbot.welcomeMessage}
+          description={chatbot.description}
+          tags={chatbot.tags}
+          prompt={chatbot.prompt}
+          handleDelete={() => handleDelete && handleDelete(chatbot)}
+        />
+      ))}
     </>
   )
 }

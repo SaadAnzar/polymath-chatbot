@@ -58,66 +58,62 @@ export default function Home() {
     }
   }
 
-  return (
-    <>
-      {!session ? (
-        <Login />
-      ) : (
-        <div className="flex h-screen w-full">
-          <SideBar activeTab={activeTab} setActiveTab={setActiveTab} />
+  if (!session) return <Login />
 
-          <div className="w-[45%]">
-            <div className="h-full w-3/4 border-r-2">
-              <form onSubmit={createChatbot}>
-                {activeTab === "basics" && (
-                  <Basics
-                    image={image}
-                    setImage={setImage}
-                    imagePreview={imagePreview}
-                    setImagePreview={setImagePreview}
-                    name={name}
-                    setName={setName}
-                    welcomeMessage={welcomeMessage}
-                    setWelcomeMessage={setWelcomeMessage}
-                    description={description}
-                    setDescription={setDescription}
-                  />
-                )}
-                {activeTab === "data" && (
-                  <Data
-                    file={file}
-                    setFile={setFile}
-                    tags={tags}
-                    setTags={setTags}
-                  />
-                )}
-                {activeTab === "prompt" && (
-                  <Prompt prompt={prompt} setPrompt={setPrompt} />
-                )}
-                <div className="m-2 flex justify-center">
-                  <button
-                    type="submit"
-                    className="rounded bg-black px-4 py-2 font-bold text-white hover:bg-zinc-700"
-                  >
-                    Create Chatbot
-                  </button>
-                </div>
-              </form>
+  return (
+    <div className="flex h-screen w-full">
+      <SideBar activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      <div className="w-[45%]">
+        <div className="h-full w-3/4 border-r-2">
+          <form onSubmit={createChatbot}>
+            {activeTab === "basics" && (
+              <Basics
+                image={image}
+                setImage={setImage}
+                imagePreview={imagePreview}
+                setImagePreview={setImagePreview}
+                name={name}
+                setName={setName}
+                welcomeMessage={welcomeMessage}
+                setWelcomeMessage={setWelcomeMessage}
+                description={description}
+                setDescription={setDescription}
+              />
+            )}
+            {activeTab === "data" && (
+              <Data
+                file={file}
+                setFile={setFile}
+                tags={tags}
+                setTags={setTags}
+              />
+            )}
+            {activeTab === "prompt" && (
+              <Prompt prompt={prompt} setPrompt={setPrompt} />
+            )}
+            <div className="m-2 flex justify-center">
+              <button
+                type="submit"
+                className="rounded bg-black px-4 py-2 font-bold text-white hover:bg-zinc-700"
+              >
+                Create Chatbot
+              </button>
             </div>
-          </div>
-          <div className="w-[55%] p-4 pr-20">
-            <Chatbot
-              imagePreview={imagePreview}
-              name={name}
-              welcomeMessage={welcomeMessage}
-              description={description}
-              file={file}
-              tags={tags}
-              prompt={prompt}
-            />
-          </div>
+          </form>
         </div>
-      )}
-    </>
+      </div>
+      <div className="w-[55%] p-4 pr-20">
+        <Chatbot
+          imagePreview={imagePreview}
+          name={name}
+          welcomeMessage={welcomeMessage}
+          description={description}
+          file={file}
+          tags={tags}
+          prompt={prompt}
+        />
+      </div>
+    </div>
   )
 }

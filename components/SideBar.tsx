@@ -54,21 +54,18 @@ const SideBar = ({ activeTab, setActiveTab }: Props) => {
       </div>
       <div className="mb-4 flex justify-center">
         {session && (
-          <div className="flex flex-col items-center">
+          <div
+            onClick={() => router.push("/profile")}
+            className="flex cursor-pointer flex-col items-center hover:opacity-50"
+          >
             <Image
-              onClick={() => router.push("/profile")}
               src={session.user?.image!}
               alt="Profile pic"
-              className="mx-auto mb-2 cursor-pointer rounded-full hover:opacity-50"
+              className="mx-auto mb-2 rounded-full"
               width={32}
               height={32}
             />
-            <button
-              onClick={() => signOut()}
-              className="text-sm font-medium text-gray-700 hover:opacity-50"
-            >
-              Sign Out
-            </button>
+            <span className="text-center text-base">{session.user?.name}</span>
           </div>
         )}
       </div>

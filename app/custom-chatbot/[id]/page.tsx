@@ -197,7 +197,7 @@ const CustomChatbot = () => {
                     event.target.value.slice(1)
                 )
               }
-              className="w-full border-none bg-inherit outline-none placeholder:text-[#707070] focus:outline-none"
+              className="m-0 w-full border-none bg-inherit p-0 outline-none placeholder:text-[#707070] focus:outline-none focus:ring-0"
             />
             <button
               type="submit"
