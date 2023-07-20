@@ -123,6 +123,8 @@ const Basics = ({
             onChange={(e) => setWelcomeMessage(e.target.value)}
             placeholder="Enter a welcome message."
             required
+            minLength={3}
+            title="Please enter a welcome message for your chatbot."
             className="h-10 w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
           />
         </div>

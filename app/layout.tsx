@@ -1,5 +1,6 @@
 import "./globals.css"
 
+import { Toaster } from "@/components/ui/toaster"
 import Provider from "@/components/Provider"
 
 export const metadata = {
@@ -15,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <Provider>{children}</Provider>
+        <Provider>
+          {children}
+          <Toaster />
+        </Provider>
       </body>
     </html>
   )

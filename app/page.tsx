@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
 import Basics from "@/components/Basics"
 import Chatbot from "@/components/Chatbot"
 import Data from "@/components/Data"
@@ -14,6 +15,8 @@ import SideBar from "@/components/SideBar"
 
 export default function Home() {
   const { data: session } = useSession()
+
+  const { toast } = useToast()
 
   const router = useRouter()
 
@@ -28,6 +31,28 @@ export default function Home() {
   const [tags, setTags] = useState("")
 
   const [prompt, setPrompt] = useState("")
+
+  const handleButtonClick1 = () => {
+    if (!name) {
+      toast({
+        description: "Please enter a name for your chatbot.",
+      })
+    } else if (name.length < 3) {
+      toast({
+        description: "Name must be at least 3 characters long.",
+      })
+    } else if (!welcomeMessage) {
+      toast({
+        description: "Please enter a welcome message for your chatbot.",
+      })
+    } else if (welcomeMessage.length < 3) {
+      toast({
+        description: "Welcome message must be at least 3 characters long.",
+      })
+    } else {
+      setActiveTab("data")
+    }
+  }
 
   const createChatbot = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -79,8 +104,8 @@ export default function Home() {
                 />
                 <div className="m-2 flex justify-center">
                   <Button
-                    onClick={() => setActiveTab("data")}
-                    disabled={name === "" || welcomeMessage === ""}
+                    onClick={handleButtonClick1}
+                    // disabled={name.length < 3 || welcomeMessage.length < 3}
                   >
                     Next
                   </Button>
