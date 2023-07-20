@@ -4,7 +4,7 @@ import React from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Database, SlidersHorizontal, TerminalSquare } from "lucide-react"
-import { signOut, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 
 type Props = {
   activeTab: string
@@ -15,19 +15,15 @@ const SideBar = ({ activeTab, setActiveTab }: Props) => {
   const { data: session } = useSession()
   const router = useRouter()
 
-  const handleTabClick = (tab: any) => {
-    setActiveTab(tab)
-  }
-
   return (
-    <div className="flex w-[10%] flex-col justify-between bg-[#f3f3ee] pt-4">
+    <div className="flex w-[15%] flex-col justify-between bg-[#f3f3ee] pt-4">
       <div>
         <ul>
           <li
             className={`list-style-none m-2 flex cursor-pointer items-center gap-x-4 rounded-lg p-1 hover:bg-white ${
               activeTab === "basics" ? "bg-white shadow-sm" : ""
             }`}
-            onClick={() => handleTabClick("basics")}
+            onClick={() => setActiveTab("basics")}
           >
             <TerminalSquare size={18} />
             Basics
@@ -36,7 +32,7 @@ const SideBar = ({ activeTab, setActiveTab }: Props) => {
             className={`list-style-none m-2 flex cursor-pointer items-center gap-x-4 rounded-lg p-1 hover:bg-white ${
               activeTab === "data" ? "bg-white shadow-sm" : ""
             }`}
-            onClick={() => handleTabClick("data")}
+            onClick={() => setActiveTab("data")}
           >
             <Database size={18} />
             Data
@@ -45,7 +41,7 @@ const SideBar = ({ activeTab, setActiveTab }: Props) => {
             className={`list-style-none m-2 flex cursor-pointer items-center gap-x-4 rounded-lg p-1 hover:bg-white ${
               activeTab === "prompt" ? "bg-white shadow-sm" : ""
             }`}
-            onClick={() => handleTabClick("prompt")}
+            onClick={() => setActiveTab("prompt")}
           >
             <SlidersHorizontal size={18} />
             Prompt

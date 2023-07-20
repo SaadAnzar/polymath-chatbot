@@ -11,7 +11,6 @@ const ChatbotSchema = new Schema({
   },
   imageURL: {
     type: String,
-    required: [true, "Chatbot icon is required."],
   },
   welcomeMessage: {
     type: String,

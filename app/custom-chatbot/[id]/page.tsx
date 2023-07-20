@@ -4,8 +4,26 @@ import React, { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import axios from "axios"
-import { motion } from "framer-motion"
-import { UserCircle2 } from "lucide-react"
+import { Grid } from "react-loader-spinner"
+
+import { cn } from "@/lib/utils"
+import { Avatar } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ChatbotProps {
   imageURL: string
@@ -55,13 +73,19 @@ const CustomChatbot = () => {
   const [chats, setChats] = useState<Chat[]>([
     { message: welcomeMessage, author: "bot" },
   ])
-  const [loading, setLoading] = useState(false)
 
-  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Create a reference to the scroll area
+  const scrollAreaRef = useRef<null | HTMLDivElement>(null)
 
   useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    // Scroll to the bottom when the messages change
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTo({
+        top: scrollAreaRef.current.scrollHeight,
+        behavior: "smooth",
+      })
     }
   }, [chats])
 
@@ -75,7 +99,7 @@ const CustomChatbot = () => {
     event.preventDefault()
 
     setChats([...chats, { message: input, author: "user" }])
-    setLoading(true)
+    setIsLoading(true)
 
     const url = "/api/chat"
 
@@ -104,7 +128,7 @@ const CustomChatbot = () => {
           },
         ])
         setInput("")
-        setLoading(false)
+        setIsLoading(false)
       })
       .catch((error) => {
         console.log(error)
@@ -118,110 +142,155 @@ const CustomChatbot = () => {
           },
         ])
         setInput("")
-        setLoading(false)
+        setIsLoading(false)
       })
   }
 
   return (
-    <div className="h-full rounded-2xl bg-[#f3f3ee] shadow">
-      <div className="flex rounded-t-2xl bg-gray-50 px-4 py-2 shadow-sm">
-        <div className="grow items-center justify-between">
-          <div className="flex justify-between">
-            <h1 className="inline-block text-lg font-bold">
+    <Popover>
+      <PopoverTrigger asChild className="fixed bottom-3 right-3">
+        <Button variant="outline">Open</Button>
+      </PopoverTrigger>
+      <PopoverContent className="fixed bottom-11 right-9">
+        <Card className="w-[440px]">
+          <CardHeader>
+            <CardTitle className="text-lg">
               {chatbotName || "Polymath Chatbot"}
-            </h1>
-            <span className="text-sm text-gray-500">{tags || "AI, GPT-3"}</span>
-          </div>
-          <span className="text-sm text-gray-500">
-            {description || "This is your AI assistant. Ask whatever you want."}
-          </span>
-        </div>
-      </div>
-
-      <div ref={chatContainerRef} className="m-2 h-[75vh] overflow-y-auto p-1">
-        {chats.map((chat, index) => (
-          <div
-            key={index}
-            className={`mx-2.5 my-2 rounded-lg py-0.5 ${
-              chat.author === "user" ? "text-right" : "w-[90%] text-left"
-            }`}
-          >
-            <div className="inline-flex items-center">
-              {chat.author === "bot" && !imageURL && (
-                <UserCircle2 width={30} height={30} />
-              )}
-              {chat.author === "bot" && imageURL && (
-                <Image
-                  src={imageURL}
-                  alt="Chatbot Icon"
-                  width={30}
-                  height={30}
-                  className="rounded-full"
-                />
-              )}
-
-              <span
-                className={`mx-2 inline-block rounded-lg p-2 text-base font-medium ${
-                  chat.author === "user"
-                    ? "rounded-br-none bg-[#FFEFD9] text-[#FF9500]"
-                    : "rounded-bl-none bg-white text-gray-700"
-                }`}
-              >
-                {chat.message}
-              </span>
-
-              {chat.author === "user" && <UserCircle2 width={30} height={30} />}
-            </div>
-          </div>
-        ))}
-        {loading && (
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity }}
-            className="ml-2 mt-2 flex h-4 w-4 animate-spin items-start rounded-full ring-gray-400"
-          >
-            <div className="h-2 w-2 rounded-full bg-gray-400"></div>
-          </motion.div>
-        )}
-      </div>
-      <div className="m-2 rounded-[2rem] bg-white py-2 drop-shadow-sm">
-        <form onSubmit={handleSubmit}>
-          <div className="flex items-center px-4 py-1">
-            <input
-              type="text"
-              value={input}
-              placeholder="Ask anything..."
-              onChange={(event) =>
-                setInput(
-                  event.target.value.charAt(0).toUpperCase() +
-                    event.target.value.slice(1)
-                )
-              }
-              className="m-0 w-full border-none bg-inherit p-0 outline-none placeholder:text-[#707070] focus:outline-none focus:ring-0"
-            />
-            <button
-              type="submit"
-              className="ml-2 rounded-full bg-[#f3f3ee] p-1 hover:bg-[wheat]"
+            </CardTitle>
+            <CardDescription className="leading-3">
+              Powered by{" "}
+              <span className="font-medium text-black">Polymath</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea
+              ref={scrollAreaRef}
+              className="spacy-y-4 h-[450px] w-full overflow-y-auto pr-4"
             >
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 24 24"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g>
-                  <path fill="none" d="M0 0h24v24H0z"></path>
-                  <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
-                </g>
-              </svg>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+              {chats.map((chat, index) => (
+                <div
+                  key={index}
+                  className="my-4 flex flex-1 gap-3 text-sm text-gray-600"
+                >
+                  {chat.author === "user" && (
+                    <Avatar className="h-8 w-8">
+                      <div className="rounded-full border bg-gray-100 p-1">
+                        <svg
+                          stroke="none"
+                          fill="black"
+                          strokeWidth="0"
+                          viewBox="0 0 16 16"
+                          height="20"
+                          width="20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"></path>
+                        </svg>
+                      </div>
+                    </Avatar>
+                  )}
+                  {chat.author === "bot" && !imageURL && (
+                    <Avatar className="h-8 w-8">
+                      <div
+                        className={cn(
+                          "rounded-full border bg-gray-100 p-1",
+                          isLoading && "animate-pulse"
+                        )}
+                      >
+                        <svg
+                          stroke="currentColor"
+                          fill="currentColor"
+                          strokeWidth="0"
+                          viewBox="0 0 640 512"
+                          height="1.5em"
+                          width="1.5em"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z"></path>
+                        </svg>
+                      </div>
+                    </Avatar>
+                  )}
+                  {chat.author === "bot" && imageURL && (
+                    <Avatar className="h-8 w-8">
+                      <div
+                        className={cn(
+                          "rounded-full border bg-gray-100",
+                          isLoading && "animate-pulse"
+                        )}
+                      >
+                        <Image
+                          src={imageURL}
+                          alt="Chatbot Icon"
+                          width={30}
+                          height={30}
+                          className="rounded-full"
+                        />
+                      </div>
+                    </Avatar>
+                  )}
+
+                  <div className="leading-relaxed">
+                    <span className="block font-bold text-gray-700">
+                      {chat.author === "user"
+                        ? "You"
+                        : `${chatbotName || "Polymath Chatbot"}`}{" "}
+                    </span>
+                    {chat.message}
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="px-2.5">
+                  <Grid
+                    height={12}
+                    width={12}
+                    radius={5}
+                    ariaLabel="grid-loading"
+                    color="#1a1a1a"
+                    ms-visible={true}
+                  />
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+          <CardFooter>
+            <form
+              onSubmit={handleSubmit}
+              className="flex w-full items-center justify-center space-x-2"
+            >
+              <Input
+                placeholder="Type your message"
+                value={input}
+                onChange={(event) =>
+                  setInput(
+                    event.target.value.charAt(0).toUpperCase() +
+                      event.target.value.slice(1)
+                  )
+                }
+              />
+              <Button disabled={isLoading}>
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Grid
+                      height={12}
+                      width={12}
+                      radius={5}
+                      ariaLabel="grid-loading"
+                      color="#fff"
+                      ms-visible={true}
+                    />
+                    {"Loading..."}
+                  </div>
+                ) : (
+                  "Send"
+                )}
+              </Button>
+            </form>
+          </CardFooter>
+        </Card>
+      </PopoverContent>
+    </Popover>
   )
 }
 

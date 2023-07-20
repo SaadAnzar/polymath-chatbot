@@ -27,7 +27,7 @@ const ChatbotCard: React.FC<CardProps> = ({
 }) => {
   const [copied, setCopied] = useState<string | false>(false)
 
-  const iframe_url = `<div style="position: fixed; bottom: 1rem; right: 2rem; width: 350px; height: 630px; overflow: hidden;"><iframe src="https://polymath-chatbot.vercel.app/custom-chatbot/${uid}" width="100%" height="100%" style="border: 0px" allowtransparency="true"></iframe></div>`
+  const iframe_url = `<iframe src="https://polymath-chatbot.vercel.app/custom-chatbot/${uid}" style="position: fixed; bottom: 1rem; right: 1rem" width="100%" height="100%" frameborder="0" allowtransparency="true"><iframe>`
 
   const handleCopy = () => {
     setCopied(iframe_url)

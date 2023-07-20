@@ -2,9 +2,10 @@
 
 import Image from "next/image"
 
+import { buttonVariants } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
 interface BasicsProps {
-  image: File | undefined
-  setImage: React.Dispatch<React.SetStateAction<File | undefined>>
   imagePreview: string
   setImagePreview: React.Dispatch<React.SetStateAction<string>>
   name: string
@@ -16,8 +17,6 @@ interface BasicsProps {
 }
 
 const Basics = ({
-  image,
-  setImage,
   imagePreview,
   setImagePreview,
   name,
@@ -27,21 +26,14 @@ const Basics = ({
   description,
   setDescription,
 }: BasicsProps) => {
-  const handleImageChange = (event: any) => {
+  const handleImageUpload = (event: any) => {
     const selectedImage = event.target.files[0]
     if (selectedImage) {
-      setImage(selectedImage)
-    }
-  }
-
-  const handleImageUpload = () => {
-    if (image) {
-      // setImagePreview(URL.createObjectURL(image))
       const reader = new FileReader()
       reader.onloadend = () => {
         setImagePreview(reader.result as string)
       }
-      reader.readAsDataURL(image)
+      reader.readAsDataURL(selectedImage)
     }
   }
 
@@ -58,49 +50,40 @@ const Basics = ({
           <div className="flex items-center justify-between p-2">
             <div>
               <h3 className="mb-4 text-xl font-medium">Upload an image</h3>
-              <button
-                onClick={handleImageUpload}
-                className="rounded-lg border-2 border-gray-200 px-8 py-1  hover:bg-black hover:text-white"
-              >
-                Upload
-              </button>
+              <Input
+                type="file"
+                id="icon"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              <label htmlFor="icon">
+                <div className={buttonVariants({ variant: "outline" })}>
+                  Upload
+                </div>
+              </label>
             </div>
-            <input
-              type="file"
-              id="icon"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
-            <label htmlFor="icon">
-              {image ? (
-                <Image
-                  src={URL.createObjectURL(image)}
-                  alt="Selected Image"
-                  width={50}
-                  height={50}
-                  className="cursor-pointer rounded-full"
-                />
-              ) : (
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="cursor-pointer"
-                >
-                  <path
-                    fill="none"
-                    stroke="#000"
-                    strokeWidth="2"
-                    d="M8,1 L14,1 L8,1 Z M19.188,19.472 L16,22 L12.5,17.5 L9.5,21 L7,7 L20,13.5 L15.5,15 L19.188,19.472 Z M19,4 L19,1 L16,1 M6,1 L3,1 L3,4 M3,14 L3,17 L6,17 M19,6 L19,10 L19,6 Z M3,12 L3,6 L3,12 Z"
-                  ></path>
-                </svg>
-              )}
-            </label>
+            {imagePreview ? (
+              <Image
+                src={imagePreview}
+                alt="Selected Image"
+                width={50}
+                height={50}
+                className="rounded-full"
+              />
+            ) : (
+              <svg
+                stroke="currentColor"
+                fill="currentColor"
+                strokeWidth="0"
+                viewBox="0 0 640 512"
+                height="2em"
+                width="2em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z"></path>
+              </svg>
+            )}
           </div>
         </div>
       </div>
@@ -119,6 +102,8 @@ const Basics = ({
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter a name for your chatbot."
             required
+            minLength={3}
+            title="Please enter a name for your chatbot."
             className="h-10 w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
           />
         </div>
@@ -145,7 +130,12 @@ const Basics = ({
       <hr className="border-t border-gray-200" />
       <div>
         <div className="px-5 py-3 text-xl font-medium">
-          <label htmlFor="description">Description(Optional)</label>
+          <label htmlFor="description">
+            Description
+            <span className="text-sm font-normal text-gray-500">
+              (Optional)
+            </span>
+          </label>
         </div>
         <hr className="border-t border-gray-200" />
         <div className="p-4">
@@ -155,7 +145,8 @@ const Basics = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter a description for your chatbot."
-            className="h-16 w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
+            className="w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
+            rows={2}
           />
         </div>
       </div>

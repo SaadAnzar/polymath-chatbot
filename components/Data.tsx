@@ -61,7 +61,12 @@ const Data = ({ file, setFile, tags, setTags }: DataProps) => {
       <hr className="border-t border-gray-200" />
       <div>
         <div className="px-5 py-3 text-xl font-medium">
-          <label htmlFor="name">Add Tags to Your Data(Optional)</label>
+          <label htmlFor="name">
+            Add Tags to Your Data
+            <span className="text-sm font-normal text-gray-500">
+              (Optional)
+            </span>
+          </label>
         </div>
         <hr className="border-t border-gray-200" />
         <div className="p-4">

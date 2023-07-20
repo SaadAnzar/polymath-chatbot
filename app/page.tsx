@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 
+import { Button } from "@/components/ui/button"
 import Basics from "@/components/Basics"
 import Chatbot from "@/components/Chatbot"
 import Data from "@/components/Data"
@@ -18,7 +19,6 @@ export default function Home() {
 
   const [activeTab, setActiveTab] = useState("basics")
 
-  const [image, setImage] = useState<File>()
   const [imagePreview, setImagePreview] = useState("")
   const [name, setName] = useState("")
   const [welcomeMessage, setWelcomeMessage] = useState("")
@@ -66,42 +66,64 @@ export default function Home() {
         <div className="h-full w-3/4 border-r-2">
           <form onSubmit={createChatbot}>
             {activeTab === "basics" && (
-              <Basics
-                image={image}
-                setImage={setImage}
-                imagePreview={imagePreview}
-                setImagePreview={setImagePreview}
-                name={name}
-                setName={setName}
-                welcomeMessage={welcomeMessage}
-                setWelcomeMessage={setWelcomeMessage}
-                description={description}
-                setDescription={setDescription}
-              />
+              <div>
+                <Basics
+                  imagePreview={imagePreview}
+                  setImagePreview={setImagePreview}
+                  name={name}
+                  setName={setName}
+                  welcomeMessage={welcomeMessage}
+                  setWelcomeMessage={setWelcomeMessage}
+                  description={description}
+                  setDescription={setDescription}
+                />
+                <div className="m-2 flex justify-center">
+                  <Button
+                    onClick={() => setActiveTab("data")}
+                    disabled={name === "" || welcomeMessage === ""}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
             )}
             {activeTab === "data" && (
-              <Data
-                file={file}
-                setFile={setFile}
-                tags={tags}
-                setTags={setTags}
-              />
+              <div>
+                <Data
+                  file={file}
+                  setFile={setFile}
+                  tags={tags}
+                  setTags={setTags}
+                />
+                <div className="m-2 flex justify-center">
+                  <Button
+                    onClick={() => setActiveTab("prompt")}
+                    // disabled={file === undefined || tags === ""}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
             )}
             {activeTab === "prompt" && (
-              <Prompt prompt={prompt} setPrompt={setPrompt} />
+              <div>
+                <Prompt prompt={prompt} setPrompt={setPrompt} />
+                <div className="m-2 flex justify-center">
+                  <Button
+                    type="submit"
+                    disabled={
+                      name === "" || welcomeMessage === "" || prompt === ""
+                    }
+                  >
+                    Create Chatbot
+                  </Button>
+                </div>
+              </div>
             )}
-            <div className="m-2 flex justify-center">
-              <button
-                type="submit"
-                className="rounded bg-black px-4 py-2 font-bold text-white hover:bg-zinc-700"
-              >
-                Create Chatbot
-              </button>
-            </div>
           </form>
         </div>
       </div>
-      <div className="w-[55%] p-4 pr-20">
+      <div className="w-[40%] p-4">
         <Chatbot
           imagePreview={imagePreview}
           name={name}
