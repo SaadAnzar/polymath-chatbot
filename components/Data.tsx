@@ -20,7 +20,7 @@ const Data = ({ file, setFile, tags, setTags }: DataProps) => {
       <h1 className="px-6 py-4 text-2xl font-semibold">Data</h1>
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">
+        <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="data">Add New Files</label>
         </div>
         <hr className="border-t border-gray-200" />
@@ -60,7 +60,7 @@ const Data = ({ file, setFile, tags, setTags }: DataProps) => {
       </div>
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">
+        <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="name">
             Add Tags to Your Data
             <span className="text-sm font-normal text-gray-500">
@@ -76,7 +76,7 @@ const Data = ({ file, setFile, tags, setTags }: DataProps) => {
             name="tags"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
-            placeholder="Enter tags for your data like 'Chatbot, GPT-3'"
+            placeholder="Please enter tags for your data like 'Chatbot, GPT-3'."
             className="h-10 w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
           />
         </div>

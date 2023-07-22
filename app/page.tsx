@@ -23,16 +23,20 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("basics")
 
   const [imagePreview, setImagePreview] = useState("")
-  const [name, setName] = useState("")
-  const [welcomeMessage, setWelcomeMessage] = useState("")
+  const [name, setName] = useState("Polymath Chatbot")
+  const [welcomeMessage, setWelcomeMessage] = useState(
+    "Hi, How can I help you?"
+  )
   const [description, setDescription] = useState("")
 
   const [file, setFile] = useState<File>()
   const [tags, setTags] = useState("")
 
-  const [prompt, setPrompt] = useState("")
+  const [prompt, setPrompt] = useState("Speak like Yoda from Star Wars")
 
-  const handleButtonClick1 = () => {
+  const handleButtonClick = (e: any) => {
+    e.preventDefault()
+
     if (!name) {
       toast({
         description: "Please enter a name for your chatbot.",
@@ -59,26 +63,51 @@ export default function Home() {
 
     const uid = session?.user?.id
 
-    try {
-      const response = await fetch("/api/chatbot/new", {
-        method: "POST",
-        body: JSON.stringify({
-          userId: uid,
-          chatbotName: name,
-          imageURL: imagePreview,
-          welcomeMessage: welcomeMessage,
-          description: description,
-          tags: tags,
-          prompt: prompt,
-        }),
+    if (!name) {
+      toast({
+        description: "Please enter a name for your chatbot.",
       })
+    } else if (name.length < 3) {
+      toast({
+        description: "Name must be at least 3 characters long.",
+      })
+    } else if (!welcomeMessage) {
+      toast({
+        description: "Please enter a welcome message for your chatbot.",
+      })
+    } else if (welcomeMessage.length < 3) {
+      toast({
+        description: "Welcome message must be at least 3 characters long.",
+      })
+    } else if (!prompt) {
+      toast({
+        description: "Please enter a prompt for your chatbot.",
+      })
+    } else if (prompt.length < 3) {
+      toast({
+        description: "Prompt must be at least 3 characters long.",
+      })
+    } else
+      try {
+        const response = await fetch("/api/chatbot/new", {
+          method: "POST",
+          body: JSON.stringify({
+            userId: uid,
+            chatbotName: name,
+            imageURL: imagePreview,
+            welcomeMessage: welcomeMessage,
+            description: description,
+            tags: tags,
+            prompt: prompt,
+          }),
+        })
 
-      if (response.ok) {
-        router.push("/profile")
+        if (response.ok) {
+          router.push("/profile")
+        }
+      } catch (error) {
+        console.log(error)
       }
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   if (!session) return <Login />
@@ -103,12 +132,7 @@ export default function Home() {
                   setDescription={setDescription}
                 />
                 <div className="m-2 flex justify-center">
-                  <Button
-                    onClick={handleButtonClick1}
-                    // disabled={name.length < 3 || welcomeMessage.length < 3}
-                  >
-                    Next
-                  </Button>
+                  <Button onClick={handleButtonClick}>Next</Button>
                 </div>
               </div>
             )}
@@ -121,12 +145,7 @@ export default function Home() {
                   setTags={setTags}
                 />
                 <div className="m-2 flex justify-center">
-                  <Button
-                    onClick={() => setActiveTab("prompt")}
-                    // disabled={file === undefined || tags === ""}
-                  >
-                    Next
-                  </Button>
+                  <Button onClick={() => setActiveTab("prompt")}>Next</Button>
                 </div>
               </div>
             )}
@@ -134,14 +153,7 @@ export default function Home() {
               <div>
                 <Prompt prompt={prompt} setPrompt={setPrompt} />
                 <div className="m-2 flex justify-center">
-                  <Button
-                    type="submit"
-                    disabled={
-                      name === "" || welcomeMessage === "" || prompt === ""
-                    }
-                  >
-                    Create Chatbot
-                  </Button>
+                  <Button type="submit">Create Chatbot</Button>
                 </div>
               </div>
             )}

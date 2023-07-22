@@ -23,7 +23,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ChatbotProps {
   imageURL: string
@@ -101,18 +100,8 @@ const CustomChatbot = () => {
     setChats([...chats, { message: input, author: "user" }])
     setIsLoading(true)
 
-    const url = "/api/chat"
-
-    const data = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: prompt },
-        { role: "user", content: input },
-      ],
-    }
-
     axios
-      .post(url, data)
+      .post("/api/conversation", { prompt, input })
       .then((response) => {
         const Answer = response.data.choices[0].message.content
 
@@ -149,9 +138,22 @@ const CustomChatbot = () => {
   return (
     <Popover>
       <PopoverTrigger asChild className="fixed bottom-3 right-3">
-        <Button variant="outline">Open</Button>
+        <Button variant="ghost" size="icon">
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 512 512"
+            height="2em"
+            width="2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M425.9 170.4H204.3c-21 0-38.1 17.1-38.1 38.1v154.3c0 21 17.1 38 38.1 38h126.8c2.8 0 5.6 1.2 7.6 3.2l63 58.1c3.5 3.4 9.3 2 9.3-2.9v-50.6c0-6 3.8-7.9 9.8-7.9h1c21 0 42.1-16.9 42.1-38V208.5c.1-21.1-17-38.1-38-38.1z"></path>
+            <path d="M174.4 145.9h177.4V80.6c0-18-14.6-32.6-32.6-32.6H80.6C62.6 48 48 62.6 48 80.6v165.2c0 18 14.6 32.6 32.6 32.6h61.1v-99.9c.1-18 14.7-32.6 32.7-32.6z"></path>
+          </svg>
+        </Button>
       </PopoverTrigger>
-      <PopoverContent className="fixed bottom-11 right-9">
+      <PopoverContent className="fixed bottom-12 right-0">
         <Card className="w-[440px]">
           <CardHeader>
             <CardTitle className="text-lg">
@@ -163,7 +165,7 @@ const CustomChatbot = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ScrollArea
+            <div
               ref={scrollAreaRef}
               className="spacy-y-4 h-[450px] w-full overflow-y-auto pr-4"
             >
@@ -252,7 +254,7 @@ const CustomChatbot = () => {
                   />
                 </div>
               )}
-            </ScrollArea>
+            </div>
           </CardContent>
           <CardFooter>
             <form

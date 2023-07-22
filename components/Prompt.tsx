@@ -13,7 +13,7 @@ const Prompt = ({ prompt, setPrompt }: PromptProps) => {
       <h1 className="px-6 py-4 text-2xl font-semibold">Chatbot Prompt</h1>
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">Model Name</div>
+        <div className="px-5 py-2.5 text-xl font-medium">Model Name</div>
         <hr className="border-t border-gray-200" />
         <div className="px-5 py-4">
           <div className="flex items-center">
@@ -35,20 +35,19 @@ const Prompt = ({ prompt, setPrompt }: PromptProps) => {
 
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">
+        <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="prompt">Prompt Text</label>
         </div>
         <hr className="border-t border-gray-200" />
         <div className="p-4">
-          <input
-            type="text"
+          <textarea
             id="prompt"
             name="prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Enter your prompt here."
-            required
-            className="h-10 w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
+            placeholder="Please enter a prompt for your chatbot here."
+            className="w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
+            rows={3}
           />
         </div>
       </div>

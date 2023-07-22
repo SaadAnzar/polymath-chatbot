@@ -2,7 +2,10 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ClipboardCheck, Copy, Trash2 } from "lucide-react"
+import Link from "next/link"
+import { ClipboardCheck, Copy, ExternalLink, Trash2 } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 
 interface CardProps {
   uid: string
@@ -69,24 +72,26 @@ const ChatbotCard: React.FC<CardProps> = ({
           {prompt}
         </p>
       </div>
-      <div className="flex w-1/4 flex-col items-center justify-center">
-        <button className="cursor-pointer text-white" onClick={handleCopy}>
+      <div className="flex w-1/4 flex-col items-center justify-center gap-y-2">
+        <Button asChild>
+          <Link href={`/custom-chatbot/${uid}`}>
+            View <ExternalLink className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+        <Button variant="outline" onClick={handleCopy}>
           {copied === iframe_url ? (
-            <span className="m-2 inline-flex items-center gap-x-2 rounded-lg bg-green-700 p-2">
-              Copied <ClipboardCheck size={20} />
-            </span>
+            <>
+              Copied <ClipboardCheck className="ml-2 h-4 w-4" />
+            </>
           ) : (
-            <span className="m-2 inline-flex items-center gap-x-2 rounded-lg bg-gray-950 p-2 hover:bg-gray-800">
-              Embed <Copy size={20} />
-            </span>
+            <>
+              Embed <Copy className="ml-2 h-4 w-4" />
+            </>
           )}
-        </button>
-        <button
-          onClick={handleDelete}
-          className="m-2 inline-flex cursor-pointer items-center gap-x-2 rounded-lg bg-red-500 p-2 text-white hover:bg-red-600"
-        >
-          Delete <Trash2 size={20} />
-        </button>
+        </Button>
+        <Button variant="destructive" onClick={handleDelete}>
+          Delete <Trash2 className="ml-2 h-4 w-4" />
+        </Button>
       </div>
     </div>
   )

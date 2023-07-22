@@ -42,14 +42,14 @@ const Basics = ({
       <h1 className="px-6 py-4 text-2xl font-semibold">Chatbot Basics</h1>
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">
+        <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="icon">Chatbot Icon</label>
         </div>
         <hr className="border-t border-gray-200" />
-        <div className="p-4">
+        <div className="px-4 py-2">
           <div className="flex items-center justify-between p-2">
             <div>
-              <h3 className="mb-4 text-xl font-medium">Upload an image</h3>
+              <h3 className="mb-3 text-xl font-medium">Upload an image</h3>
               <Input
                 type="file"
                 id="icon"
@@ -89,7 +89,7 @@ const Basics = ({
       </div>
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">
+        <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="name">Chatbot Name</label>
         </div>
         <hr className="border-t border-gray-200" />
@@ -100,17 +100,14 @@ const Basics = ({
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Enter a name for your chatbot."
-            required
-            minLength={3}
-            title="Please enter a name for your chatbot."
+            placeholder="Please enter a name for your chatbot."
             className="h-10 w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
           />
         </div>
       </div>
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">
+        <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="welcomeMessage">Welcome Message</label>
         </div>
         <hr className="border-t border-gray-200" />
@@ -121,17 +118,14 @@ const Basics = ({
             name="welcomeMessage"
             value={welcomeMessage}
             onChange={(e) => setWelcomeMessage(e.target.value)}
-            placeholder="Enter a welcome message."
-            required
-            minLength={3}
-            title="Please enter a welcome message for your chatbot."
+            placeholder="Please enter a welcome message for your chatbot."
             className="h-10 w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
           />
         </div>
       </div>
       <hr className="border-t border-gray-200" />
       <div>
-        <div className="px-5 py-3 text-xl font-medium">
+        <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="description">
             Description
             <span className="text-sm font-normal text-gray-500">
@@ -146,9 +140,9 @@ const Basics = ({
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter a description for your chatbot."
+            placeholder="Please enter a description for your chatbot."
             className="w-full rounded border border-gray-300 px-2 py-1 font-semibold shadow-sm outline-none focus:border-gray-400 focus:ring-0"
-            rows={2}
+            rows={3}
           />
         </div>
       </div>

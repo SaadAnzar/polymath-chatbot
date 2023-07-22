@@ -17,7 +17,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ChatbotProps {
   imagePreview: string
@@ -74,18 +73,8 @@ export default function Chatbot({
     setChats([...chats, { message: input, author: "user" }])
     setIsLoading(true)
 
-    const url = "/api/chat"
-
-    const data = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: prompt },
-        { role: "user", content: input },
-      ],
-    }
-
     axios
-      .post(url, data)
+      .post("/api/conversation", { prompt, input })
       .then((response) => {
         const Answer = response.data.choices[0].message.content
 
@@ -128,7 +117,7 @@ export default function Chatbot({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea
+        <div
           ref={scrollAreaRef}
           className="spacy-y-4 h-[450px] w-full overflow-y-auto pr-4"
         >
@@ -217,7 +206,7 @@ export default function Chatbot({
               />
             </div>
           )}
-        </ScrollArea>
+        </div>
       </CardContent>
       <CardFooter>
         <form
