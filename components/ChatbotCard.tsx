@@ -43,7 +43,7 @@ const ChatbotCard: React.FC<CardProps> = ({
       <div className="flex w-1/4 justify-center">
         <Image
           className="rounded-full object-cover"
-          src={imageURL}
+          src={imageURL || "/favicon.ico"}
           alt={chatbotName}
           width={80}
           height={80}
