@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { use, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import axios from "axios"

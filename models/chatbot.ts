@@ -19,6 +19,10 @@ const ChatbotSchema = new Schema({
   description: {
     type: String,
   },
+  // data: {
+  //   type: File,
+  //   required: [true, "Data is required."],
+  // },
   tags: {
     type: String,
   },

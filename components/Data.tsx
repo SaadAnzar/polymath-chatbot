@@ -52,7 +52,7 @@ const Data = ({ file, setFile, tags, setTags }: DataProps) => {
           <input
             type="file"
             id="data"
-            accept=".csv, .json, .xlsx, .xls,.txt, .docx, .pdf"
+            accept=".pdf"
             onChange={handleDataChange}
             className="hidden"
           />
