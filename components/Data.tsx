@@ -4,8 +4,7 @@ import React, { useState } from "react"
 import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-
-import { toast } from "./ui/use-toast"
+import { toast } from "@/components/ui/use-toast"
 
 function generateID() {
   const characters =

@@ -184,7 +184,7 @@ export default function Chatbot({
       <CardContent>
         <div
           ref={scrollAreaRef}
-          className="spacy-y-4 h-[450px] w-full overflow-y-auto pr-4"
+          className="h-[450px] w-full overflow-y-auto pr-4"
         >
           {chats.map((chat, index) => (
             <div

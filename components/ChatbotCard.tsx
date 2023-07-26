@@ -92,7 +92,7 @@ const ChatbotCard: React.FC<CardProps> = ({
       </div>
       <div className="flex w-1/4 flex-col items-center justify-center gap-y-2">
         <Button asChild>
-          <Link href={`/custom-chatbot/${uid}`}>
+          <Link href={`/chatbot/${uid}`}>
             View <ExternalLink className="ml-2 h-4 w-4" />
           </Link>
         </Button>

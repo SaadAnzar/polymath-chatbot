@@ -1,6 +1,6 @@
 "use client"
 
-import React, { use, useState } from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { useSession } from "next-auth/react"
