@@ -4,6 +4,8 @@ import React, { use, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import axios from "axios"
+import { Loader2 } from "lucide-react"
+import { set } from "mongoose"
 import { Grid } from "react-loader-spinner"
 
 import { cn } from "@/lib/utils"
@@ -47,15 +49,25 @@ const CustomChatbot = () => {
 
   const [chatbotDetails, setChatbotDetails] = useState({} as ChatbotProps)
 
+  const [isLoadingData, setIsLoadingData] = useState(true)
+
   useEffect(() => {
     const getChatbotDetails = async () => {
-      const response = await fetch(`/api/chatbot/${chatbotId}`)
-      const data = await response.json()
+      try {
+        const response = await fetch(`/api/chatbot/${chatbotId}`)
+        const data = await response.json()
 
-      setChatbotDetails(data)
+        setChatbotDetails(data)
+        setIsLoadingData(false)
+      } catch (error) {
+        console.log(error)
+        setIsLoadingData(false)
+      }
     }
 
-    if (chatbotId) getChatbotDetails()
+    if (chatbotId) {
+      getChatbotDetails()
+    }
   }, [chatbotId])
 
   const {
@@ -180,6 +192,15 @@ const CustomChatbot = () => {
       setInput("")
       setIsLoading(false)
     }
+  }
+
+  if (isLoadingData) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        <p>Loading chatbot details...</p>
+      </div>
+    )
   }
 
   return (
