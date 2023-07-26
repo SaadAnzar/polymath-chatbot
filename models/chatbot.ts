@@ -19,16 +19,17 @@ const ChatbotSchema = new Schema({
   description: {
     type: String,
   },
-  // data: {
-  //   type: File,
-  //   required: [true, "Data is required."],
-  // },
+  namespace: {
+    type: String,
+  },
+  indexName: {
+    type: String,
+  },
   tags: {
     type: String,
   },
   prompt: {
     type: String,
-    required: [true, "Prompt is required."],
   },
 })
 

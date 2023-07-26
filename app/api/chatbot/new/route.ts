@@ -9,6 +9,8 @@ export const POST = async (request: Request) => {
     imageURL,
     welcomeMessage,
     description,
+    namespace,
+    indexName,
     tags,
     prompt,
   } = await request.json()
@@ -21,6 +23,8 @@ export const POST = async (request: Request) => {
       imageURL: imageURL,
       welcomeMessage: welcomeMessage,
       description: description,
+      namespace: namespace,
+      indexName: indexName,
       tags: tags,
       prompt: prompt,
     })
