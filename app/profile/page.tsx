@@ -78,6 +78,8 @@ const MyProfile = () => {
           chatbotName={chatbot.chatbotName}
           welcomeMessage={chatbot.welcomeMessage}
           description={chatbot.description}
+          namespace={chatbot.namespace}
+          indexName={chatbot.indexName}
           tags={chatbot.tags}
           prompt={chatbot.prompt}
           handleDelete={() => handleDelete && handleDelete(chatbot)}

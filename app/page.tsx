@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { use, useState } from "react"
 import { useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"
 import { useSession } from "next-auth/react"
 
 import { Button } from "@/components/ui/button"
@@ -20,19 +21,27 @@ export default function Home() {
 
   const router = useRouter()
 
-  const [activeTab, setActiveTab] = useState("basics")
+  const [activeTab, setActiveTab] = useState("properties")
+
+  const [loading, setLoading] = useState(false)
 
   const [imagePreview, setImagePreview] = useState("")
+
   const [name, setName] = useState("Polymath Chatbot")
+
   const [welcomeMessage, setWelcomeMessage] = useState(
     "Hi, How can I help you?"
   )
+
   const [description, setDescription] = useState("")
 
-  const [file, setFile] = useState<File>()
+  const [indexName, setIndexName] = useState("")
+
   const [tags, setTags] = useState("")
 
-  const [prompt, setPrompt] = useState("Speak like Yoda from Star Wars")
+  const [prompt, setPrompt] = useState("")
+
+  const [namespace, setNamespace] = useState("")
 
   const handleButtonClick = (e: any) => {
     e.preventDefault()
@@ -79,16 +88,18 @@ export default function Home() {
       toast({
         description: "Welcome message must be at least 3 characters long.",
       })
-    } else if (!prompt) {
-      toast({
-        description: "Please enter a prompt for your chatbot.",
-      })
-    } else if (prompt.length < 3) {
-      toast({
-        description: "Prompt must be at least 3 characters long.",
-      })
+      // } else if (!prompt && !indexName) {
+      //   toast({
+      //     description:
+      //       "Please either enter a prompt for your chatbot or upload a document to query about.",
+      //   })
+      // } else if (prompt.length < 3) {
+      //   toast({
+      //     description: "Prompt must be at least 3 characters long.",
+      //   })
     } else
       try {
+        setLoading(true)
         const response = await fetch("/api/chatbot/new", {
           method: "POST",
           body: JSON.stringify({
@@ -97,12 +108,15 @@ export default function Home() {
             imageURL: imagePreview,
             welcomeMessage: welcomeMessage,
             description: description,
+            namespace: namespace,
+            indexName: indexName,
             tags: tags,
             prompt: prompt,
           }),
         })
 
         if (response.ok) {
+          setLoading(false)
           router.push("/profile")
         }
       } catch (error) {
@@ -119,7 +133,7 @@ export default function Home() {
       <div className="w-[45%]">
         <div className="h-full w-3/4 border-r-2">
           <form onSubmit={createChatbot}>
-            {activeTab === "basics" && (
+            {activeTab === "properties" && (
               <div>
                 <Basics
                   imagePreview={imagePreview}
@@ -139,21 +153,34 @@ export default function Home() {
             {activeTab === "data" && (
               <div>
                 <Data
-                  file={file}
-                  setFile={setFile}
+                  namespace={namespace}
+                  setNamespace={setNamespace}
+                  indexName={indexName}
+                  setIndexName={setIndexName}
                   tags={tags}
                   setTags={setTags}
                 />
                 <div className="m-2 flex justify-center">
-                  <Button onClick={() => setActiveTab("prompt")}>Next</Button>
+                  <Button onClick={() => setActiveTab("model")}>Next</Button>
                 </div>
               </div>
             )}
-            {activeTab === "prompt" && (
+            {activeTab === "model" && (
               <div>
-                <Prompt prompt={prompt} setPrompt={setPrompt} />
+                <Prompt
+                  prompt={prompt}
+                  setPrompt={setPrompt}
+                  indexName={indexName}
+                />
                 <div className="m-2 flex justify-center">
-                  <Button type="submit">Create Chatbot</Button>
+                  {!loading ? (
+                    <Button type="submit">Create Chatbot</Button>
+                  ) : (
+                    <Button disabled>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating Chatbot...
+                    </Button>
+                  )}
                 </div>
               </div>
             )}
@@ -166,7 +193,8 @@ export default function Home() {
           name={name}
           welcomeMessage={welcomeMessage}
           description={description}
-          file={file}
+          indexName={indexName}
+          namespace={namespace}
           tags={tags}
           prompt={prompt}
         />

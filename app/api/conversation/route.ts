@@ -16,6 +16,10 @@ export async function POST(req: Request) {
       return new NextResponse("OpenAI API Key not configured.", { status: 500 })
     }
 
+    if (!prompt) {
+      return new NextResponse("Prompt is required.", { status: 500 })
+    }
+
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [

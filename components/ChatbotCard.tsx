@@ -13,6 +13,8 @@ interface CardProps {
   chatbotName: string
   welcomeMessage: string
   description: string
+  namespace: string
+  indexName: string
   tags: string
   prompt: string
   handleDelete: any
@@ -24,6 +26,8 @@ const ChatbotCard: React.FC<CardProps> = ({
   chatbotName,
   welcomeMessage,
   description,
+  namespace,
+  indexName,
   tags,
   prompt,
   handleDelete,
@@ -67,10 +71,24 @@ const ChatbotCard: React.FC<CardProps> = ({
           <span className="font-medium">Tags: </span>
           {tags}
         </p>
-        <p className="text-base text-gray-700">
-          <span className="font-medium">Prompt: </span>
-          {prompt}
-        </p>
+        {!prompt && (
+          <>
+            <p className="text-base text-gray-700">
+              <span className="font-medium">Namespace: </span>
+              {namespace}
+            </p>
+            <p className="text-base text-gray-700">
+              <span className="font-medium">Index Name: </span>
+              {indexName}
+            </p>
+          </>
+        )}
+        {prompt && (
+          <p className="text-base text-gray-700">
+            <span className="font-medium">Prompt: </span>
+            {prompt}
+          </p>
+        )}
       </div>
       <div className="flex w-1/4 flex-col items-center justify-center gap-y-2">
         <Button asChild>

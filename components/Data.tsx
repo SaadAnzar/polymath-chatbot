@@ -1,18 +1,77 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
+import { Loader2 } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+
+import { toast } from "./ui/use-toast"
+
+function generateID() {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  let id = ""
+  for (let i = 0; i < 8; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length)
+    id += characters.charAt(randomIndex)
+  }
+  return id
+}
 
 interface DataProps {
-  file: File | undefined
-  setFile: React.Dispatch<React.SetStateAction<File | undefined>>
+  namespace: string
+  setNamespace: React.Dispatch<React.SetStateAction<string>>
+  indexName: string
+  setIndexName: React.Dispatch<React.SetStateAction<string>>
   tags: string
   setTags: React.Dispatch<React.SetStateAction<string>>
 }
 
-const Data = ({ file, setFile, tags, setTags }: DataProps) => {
-  const handleDataChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0]
+const Data = ({
+  namespace,
+  setNamespace,
+  indexName,
+  setIndexName,
+  tags,
+  setTags,
+}: DataProps) => {
+  const [file, setFile] = useState<File>()
+
+  const [loading, setLoading] = useState(false)
+
+  const handleDataChange = (event: any) => {
+    const selectedFile = event.target.files[0]
     setFile(selectedFile)
+  }
+
+  const handleDataUpload = async (e: any) => {
+    e.preventDefault()
+
+    const uuid = generateID()
+    setNamespace(uuid)
+
+    const formData = new FormData()
+    formData.append("file", file as Blob)
+
+    try {
+      setLoading(true)
+      const res = await fetch(
+        `https://langchainchatbot-64e6d01e9116.herokuapp.com/PDUpload?namespace=${uuid}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      )
+      const body = await res.json()
+      const indexName = body.index_name
+      setIndexName(indexName)
+      setLoading(false)
+      toast({
+        description: "Document uploaded successfully.",
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -21,11 +80,11 @@ const Data = ({ file, setFile, tags, setTags }: DataProps) => {
       <hr className="border-t border-gray-200" />
       <div>
         <div className="px-5 py-2.5 text-xl font-medium">
-          <label htmlFor="data">Add New Files</label>
+          <label htmlFor="data">Add New Document</label>
         </div>
         <hr className="border-t border-gray-200" />
         <div className="p-4">
-          <label htmlFor="data" className="cursor-pointer">
+          {/* <label htmlFor="data" className="cursor-pointer">
             <div className="flex h-60 flex-col items-center justify-center rounded-lg border-2 p-2">
               <svg
                 stroke="currentColor"
@@ -47,15 +106,31 @@ const Data = ({ file, setFile, tags, setTags }: DataProps) => {
                 10 MB max (Recommended){" "}
               </span>
             </div>
-          </label>
+          </label> */}
 
           <input
             type="file"
             id="data"
             accept=".pdf"
             onChange={handleDataChange}
-            className="hidden"
+            // className="hidden"
           />
+          {/* <p className="mt-2 text-gray-500">
+            {file?.name || "No file selected"}
+          </p> */}
+
+          <div className="p-4">
+            {!loading ? (
+              <Button variant="outline" onClick={handleDataUpload}>
+                Upload
+              </Button>
+            ) : (
+              <Button variant="outline" disabled>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <hr className="border-t border-gray-200" />

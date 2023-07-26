@@ -29,7 +29,8 @@ interface ChatbotProps {
   chatbotName: string
   welcomeMessage: string
   description: string
-  file: File | undefined
+  namespace: string
+  indexName: string
   tags: string
   prompt: string
 }
@@ -62,6 +63,8 @@ const CustomChatbot = () => {
     chatbotName,
     welcomeMessage,
     description,
+    namespace,
+    indexName,
     tags,
     prompt,
   }: ChatbotProps = {
@@ -94,7 +97,7 @@ const CustomChatbot = () => {
     ])
   }, [welcomeMessage])
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePromptSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     setChats([...chats, { message: input, author: "user" }])
@@ -133,6 +136,50 @@ const CustomChatbot = () => {
         setInput("")
         setIsLoading(false)
       })
+  }
+
+  const handleDataSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    setChats([...chats, { message: input, author: "user" }])
+    setIsLoading(true)
+
+    const res = await fetch(
+      `https://langchainchatbot-64e6d01e9116.herokuapp.com/Chat?query=${input}&namespace=${namespace}&index_name=${indexName}`,
+      {
+        method: "POST",
+      }
+    )
+    const body = await res.json()
+    const Answer = body.response
+
+    setChats([
+      ...chats,
+      {
+        message: input,
+        author: "user",
+      },
+      {
+        message: Answer,
+        author: "bot",
+      },
+    ])
+    setInput("")
+    setIsLoading(false)
+
+    if (!res.ok) {
+      setChats([
+        ...chats,
+        { message: input, author: "user" },
+        {
+          message:
+            "Sorry, Your document is not in the index. Please upload a new document.",
+          author: "bot",
+        },
+      ])
+      setInput("")
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -258,7 +305,7 @@ const CustomChatbot = () => {
           </CardContent>
           <CardFooter>
             <form
-              onSubmit={handleSubmit}
+              onSubmit={indexName ? handleDataSubmit : handlePromptSubmit}
               className="flex w-full items-center justify-center space-x-2"
             >
               <Input

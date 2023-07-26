@@ -21,12 +21,12 @@ const SideBar = ({ activeTab, setActiveTab }: Props) => {
         <ul>
           <li
             className={`list-style-none m-2 flex cursor-pointer items-center gap-x-4 rounded-lg p-1 px-2 hover:bg-white ${
-              activeTab === "basics" ? "bg-white shadow-sm" : ""
+              activeTab === "properties" ? "bg-white shadow-sm" : ""
             }`}
-            onClick={() => setActiveTab("basics")}
+            onClick={() => setActiveTab("properties")}
           >
             <TerminalSquare size={18} />
-            Basics
+            Properties
           </li>
           <li
             className={`list-style-none m-2 flex cursor-pointer items-center gap-x-4 rounded-lg p-1 px-2 hover:bg-white ${
@@ -39,12 +39,12 @@ const SideBar = ({ activeTab, setActiveTab }: Props) => {
           </li>
           <li
             className={`list-style-none m-2 flex cursor-pointer items-center gap-x-4 rounded-lg p-1 px-2 hover:bg-white ${
-              activeTab === "prompt" ? "bg-white shadow-sm" : ""
+              activeTab === "model" ? "bg-white shadow-sm" : ""
             }`}
-            onClick={() => setActiveTab("prompt")}
+            onClick={() => setActiveTab("model")}
           >
             <SlidersHorizontal size={18} />
-            Prompt
+            Model
           </li>
         </ul>
       </div>

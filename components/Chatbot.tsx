@@ -17,13 +17,15 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { useToast } from "@/components/ui/use-toast"
 
 interface ChatbotProps {
   imagePreview: string
   name: string
   welcomeMessage: string
   description: string
-  file: File | undefined
+  indexName: string
+  namespace: string
   tags: string
   prompt: string
 }
@@ -38,10 +40,13 @@ export default function Chatbot({
   name,
   welcomeMessage,
   description,
-  file,
+  indexName,
+  namespace,
   tags,
   prompt,
 }: ChatbotProps) {
+  const { toast } = useToast()
+
   const [input, setInput] = useState("")
   const [chats, setChats] = useState<Chat[]>([
     { message: welcomeMessage, author: "bot" },
@@ -67,45 +72,105 @@ export default function Chatbot({
     ])
   }, [welcomeMessage])
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handlePromptSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    setChats([...chats, { message: input, author: "user" }])
-    setIsLoading(true)
-
-    axios
-      .post("/api/conversation", { prompt, input })
-      .then((response) => {
-        const Answer = response.data.choices[0].message.content
-
-        setChats([
-          ...chats,
-          {
-            message: input,
-            author: "user",
-          },
-          {
-            message: Answer,
-            author: "bot",
-          },
-        ])
-        setInput("")
-        setIsLoading(false)
+    if (!prompt) {
+      toast({
+        description: "Please enter a prompt for your chatbot.",
       })
-      .catch((error) => {
-        console.log(error)
+    } else if (prompt.length < 3) {
+      toast({
+        description: "Prompt must be at least 3 characters long.",
+      })
+    } else {
+      setChats([...chats, { message: input, author: "user" }])
+      setIsLoading(true)
+
+      axios
+        .post("/api/conversation", { prompt, input })
+        .then((response) => {
+          const Answer = response.data.choices[0].message.content
+
+          setChats([
+            ...chats,
+            {
+              message: input,
+              author: "user",
+            },
+            {
+              message: Answer,
+              author: "bot",
+            },
+          ])
+          setInput("")
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          console.log(error)
+          setChats([
+            ...chats,
+            { message: input, author: "user" },
+            {
+              message:
+                "Sorry, We've ran out of Open AI credits right now! We know its not ideal.",
+              author: "bot",
+            },
+          ])
+          setInput("")
+          setIsLoading(false)
+        })
+    }
+  }
+
+  const handleDataSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!indexName) {
+      toast({
+        description: "Please upload a document for your chatbot.",
+      })
+    } else {
+      setChats([...chats, { message: input, author: "user" }])
+      setIsLoading(true)
+
+      const res = await fetch(
+        `https://langchainchatbot-64e6d01e9116.herokuapp.com/Chat?query=${input}&namespace=${namespace}&index_name=${indexName}`,
+        {
+          method: "POST",
+        }
+      )
+      const body = await res.json()
+      const Answer = body.response
+
+      setChats([
+        ...chats,
+        {
+          message: input,
+          author: "user",
+        },
+        {
+          message: Answer,
+          author: "bot",
+        },
+      ])
+      setInput("")
+      setIsLoading(false)
+
+      if (!res.ok) {
         setChats([
           ...chats,
           { message: input, author: "user" },
           {
             message:
-              "Sorry, We've ran out of Open AI credits right now! We know its not ideal.",
+              "Sorry, Your document is not in the index. Please upload a new document.",
             author: "bot",
           },
         ])
         setInput("")
         setIsLoading(false)
-      })
+      }
+    }
   }
 
   return (
@@ -210,11 +275,11 @@ export default function Chatbot({
       </CardContent>
       <CardFooter>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={indexName ? handleDataSubmit : handlePromptSubmit}
           className="flex w-full items-center justify-center space-x-2"
         >
           <Input
-            placeholder="Type your message"
+            placeholder="Ask whatever you want..."
             value={input}
             onChange={(event) =>
               setInput(

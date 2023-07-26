@@ -39,7 +39,7 @@ const Basics = ({
 
   return (
     <div>
-      <h1 className="px-6 py-4 text-2xl font-semibold">Chatbot Basics</h1>
+      <h1 className="px-6 py-4 text-2xl font-semibold">Chatbot Properties</h1>
       <hr className="border-t border-gray-200" />
       <div>
         <div className="px-5 py-2.5 text-xl font-medium">
