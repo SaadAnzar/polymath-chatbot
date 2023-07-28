@@ -35,7 +35,7 @@ const SideBar = ({ activeTab, setActiveTab }: Props) => {
             onClick={() => setActiveTab("data")}
           >
             <Database size={18} />
-            Data
+            Data/Prompt
           </li>
           <li
             className={`list-style-none m-2 flex cursor-pointer items-center gap-x-4 rounded-lg p-1 px-2 hover:bg-white ${
