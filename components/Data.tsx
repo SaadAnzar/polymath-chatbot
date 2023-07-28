@@ -18,6 +18,7 @@ function generateID() {
 }
 
 interface DataProps {
+  prompt: string
   namespace: string
   setNamespace: React.Dispatch<React.SetStateAction<string>>
   indexName: string
@@ -27,6 +28,7 @@ interface DataProps {
 }
 
 const Data = ({
+  prompt,
   namespace,
   setNamespace,
   indexName,
@@ -77,13 +79,15 @@ const Data = ({
     <div>
       <h1 className="px-6 py-4 text-2xl font-semibold">Data</h1>
       <hr className="border-t border-gray-200" />
-      <div>
-        <div className="px-5 py-2.5 text-xl font-medium">
-          <label htmlFor="data">Add New Document</label>
-        </div>
-        <hr className="border-t border-gray-200" />
-        <div className="p-4">
-          {/* <label htmlFor="data" className="cursor-pointer">
+      {!prompt && (
+        <>
+          <div>
+            <div className="px-5 py-2.5 text-xl font-medium">
+              <label htmlFor="data">Add New Document</label>
+            </div>
+            <hr className="border-t border-gray-200" />
+            <div className="p-4">
+              {/* <label htmlFor="data" className="cursor-pointer">
             <div className="flex h-60 flex-col items-center justify-center rounded-lg border-2 p-2">
               <svg
                 stroke="currentColor"
@@ -107,32 +111,34 @@ const Data = ({
             </div>
           </label> */}
 
-          <input
-            type="file"
-            id="data"
-            accept=".pdf"
-            onChange={handleDataChange}
-            // className="hidden"
-          />
-          {/* <p className="mt-2 text-gray-500">
+              <input
+                type="file"
+                id="data"
+                accept=".pdf"
+                onChange={handleDataChange}
+                // className="hidden"
+              />
+              {/* <p className="mt-2 text-gray-500">
             {file?.name || "No file selected"}
           </p> */}
 
-          <div className="p-4">
-            {!loading ? (
-              <Button variant="outline" onClick={handleDataUpload}>
-                Upload
-              </Button>
-            ) : (
-              <Button variant="outline" disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Uploading
-              </Button>
-            )}
+              <div className="p-4">
+                {!loading ? (
+                  <Button variant="outline" onClick={handleDataUpload}>
+                    Upload
+                  </Button>
+                ) : (
+                  <Button variant="outline" disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <hr className="border-t border-gray-200" />
+          <hr className="border-t border-gray-200" />
+        </>
+      )}
       <div>
         <div className="px-5 py-2.5 text-xl font-medium">
           <label htmlFor="name">

@@ -153,6 +153,7 @@ export default function Home() {
             {activeTab === "data" && (
               <div>
                 <Data
+                  prompt={prompt}
                   namespace={namespace}
                   setNamespace={setNamespace}
                   indexName={indexName}
