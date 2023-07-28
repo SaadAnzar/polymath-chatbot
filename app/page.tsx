@@ -1,6 +1,6 @@
 "use client"
 
-import React, { use, useState } from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { useSession } from "next-auth/react"
@@ -11,7 +11,7 @@ import Basics from "@/components/Basics"
 import Chatbot from "@/components/Chatbot"
 import Data from "@/components/Data"
 import Login from "@/components/Login"
-import Prompt from "@/components/Prompt"
+import Model from "@/components/Model"
 import SideBar from "@/components/SideBar"
 
 export default function Home() {
@@ -88,11 +88,11 @@ export default function Home() {
       toast({
         description: "Welcome message must be at least 3 characters long.",
       })
-      // } else if (!prompt && !indexName) {
-      //   toast({
-      //     description:
-      //       "Please either enter a prompt for your chatbot or upload a document to query about.",
-      //   })
+    } else if (!prompt && !indexName) {
+      toast({
+        description:
+          "Please either enter a prompt for your chatbot or upload a document to query about.",
+      })
       // } else if (prompt.length < 3) {
       //   toast({
       //     description: "Prompt must be at least 3 characters long.",
@@ -159,6 +159,8 @@ export default function Home() {
                   setIndexName={setIndexName}
                   tags={tags}
                   setTags={setTags}
+                  prompt={prompt}
+                  setPrompt={setPrompt}
                 />
                 <div className="m-2 flex justify-center">
                   <Button onClick={() => setActiveTab("model")}>Next</Button>
@@ -167,11 +169,7 @@ export default function Home() {
             )}
             {activeTab === "model" && (
               <div>
-                <Prompt
-                  prompt={prompt}
-                  setPrompt={setPrompt}
-                  indexName={indexName}
-                />
+                <Model />
                 <div className="m-2 flex justify-center">
                   {!loading ? (
                     <Button type="submit">Create Chatbot</Button>

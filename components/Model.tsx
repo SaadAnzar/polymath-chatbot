@@ -1,14 +1,6 @@
 "use client"
 
-import React from "react"
-
-interface PromptProps {
-  prompt: string
-  setPrompt: React.Dispatch<React.SetStateAction<string>>
-  indexName: string
-}
-
-const Prompt = ({ prompt, setPrompt, indexName }: PromptProps) => {
+const Model = () => {
   return (
     <div>
       <h1 className="px-6 py-4 text-2xl font-semibold">Chatbot Model</h1>
@@ -35,7 +27,7 @@ const Prompt = ({ prompt, setPrompt, indexName }: PromptProps) => {
       </div>
 
       <hr className="border-t border-gray-200" />
-      {!indexName && (
+      {/* {!indexName && (
         <div>
           <div className="px-5 py-2.5 text-xl font-medium">
             <label htmlFor="prompt">Prompt Text</label>
@@ -54,9 +46,9 @@ const Prompt = ({ prompt, setPrompt, indexName }: PromptProps) => {
           </div>
         </div>
       )}
-      <hr className="border-t border-gray-200" />
+      <hr className="border-t border-gray-200" /> */}
     </div>
   )
 }
 
-export default Prompt
+export default Model
