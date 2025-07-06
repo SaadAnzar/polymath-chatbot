@@ -1,6 +1,12 @@
-import { model, models, Schema } from "mongoose"
+import { Document, model, models, Schema } from "mongoose"
 
-const UserSchema = new Schema({
+export interface Users extends Document {
+  email: string
+  username: string
+  image: string
+}
+
+const UserSchema = new Schema<Users>({
   email: {
     type: String,
     unique: [true, "Email already exists!"],
@@ -19,6 +25,6 @@ const UserSchema = new Schema({
   },
 })
 
-const User = models.User || model("User", UserSchema)
+const User = models.User || model<Users>("User", UserSchema)
 
 export default User
